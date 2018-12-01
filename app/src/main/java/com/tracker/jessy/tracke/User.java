@@ -18,4 +18,18 @@ public class User
         this.isCourier = courier;
     }
 
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean isCourier() {
+        return isCourier;
+    }
+
+
 }
