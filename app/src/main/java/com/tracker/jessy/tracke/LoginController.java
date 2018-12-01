@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
+//
+//import com.google.firebase.database.DatabaseReference;
 
 public class LoginController implements View.OnClickListener {
 
-
-    private DatabaseReference mDatabase;
-    private String foo;
+//
+//    private DatabaseReference mDatabase;
+//    private String foo;
 
     public void onClick(View v) {
         switch(v.getId())
@@ -50,6 +50,6 @@ public class LoginController implements View.OnClickListener {
 //        {
 //            PrintUtils.print("Not");
 //        }
-        return false;
+        return true;
     }
 }
