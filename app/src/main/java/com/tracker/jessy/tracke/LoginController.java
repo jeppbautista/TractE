@@ -9,10 +9,10 @@ import com.google.firebase.database.DatabaseReference;
 
 public class LoginController implements View.OnClickListener {
 
+
     private DatabaseReference mDatabase;
 
 
-    @Override
     public void onClick(View v) {
         switch(v.getId())
         {
