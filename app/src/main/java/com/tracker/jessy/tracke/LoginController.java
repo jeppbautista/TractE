@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 public class LoginController implements View.OnClickListener {
+
     @Override
     public void onClick(View v) {
         switch(v.getId())

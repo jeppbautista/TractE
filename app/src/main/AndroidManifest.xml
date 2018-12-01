@@ -4,8 +4,15 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    //Google Permisions
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:allowBackup="true"
@@ -14,6 +21,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDdfOgsdUGOCZswnkHX3yX2FTyYknxS83E"></meta-data>
+
         <activity
             android:name=".MainActivity">
             <intent-filter>
@@ -22,6 +34,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.tracker.jessy.tracke.LoginActivity"></activity>
+        <activity android:name="com.tracker.jessy.tracke.MapActivity"></activity>
     </application>
 
 </manifest>
