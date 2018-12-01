@@ -68,7 +68,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     }
 
 
-    // ======================================= GOOGLE API TEST ONYL ==================================
+    // START======================================= GOOGLE API ONYL ==================================
     // Google Play Services Request variables
     private static final String TAG ="MapActivity";
 
@@ -91,4 +91,5 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         }
         return false;
     }
+    // END======================================= GOOGLE API ONYL ==================================
 }
