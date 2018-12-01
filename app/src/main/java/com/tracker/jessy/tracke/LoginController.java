@@ -11,7 +11,7 @@ public class LoginController implements View.OnClickListener {
 
 
     private DatabaseReference mDatabase;
-
+    private String foo;
 
     public void onClick(View v) {
         switch(v.getId())
