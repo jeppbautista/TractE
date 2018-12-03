@@ -3,19 +3,16 @@ package com.tracker.jessy.tracke;
 public class User
 {
     public String username;
-    public String password;
+    public String UID;
     public boolean isCourier;
+    public Location location;
 
-    public User()
-    {
 
-    }
-
-    public User (String user, String pass, boolean courier)
+    public User (String user, boolean courier, Location loc)
     {
         this.username = user;
-        this.password = pass;
         this.isCourier = courier;
+        this.location = loc;
     }
 
 
@@ -23,9 +20,6 @@ public class User
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public boolean isCourier() {
         return isCourier;

@@ -18,8 +18,9 @@ public class LoginController implements View.OnClickListener {
         {
             case R.id.btnLogin:
 
-                if (acceptCredentials(R.id.txtUser, R.id.txtPassword))
+                if (acceptCredentials(R.id.txtUser, R.id.txtPassword_2))
                 {
+                    //TODO firebase login
                     Intent logIntent = new Intent(v.getContext(), LoginActivity.class);
                     v.getContext().startActivity(logIntent);
                 }
@@ -31,7 +32,10 @@ public class LoginController implements View.OnClickListener {
 
                 break;
             case R.id.btnSignUp:
-                Log.d("View_id", "Shatoo");
+
+                Intent signIntent = new Intent(v.getContext(), SignUpActivity.class);
+                v.getContext().startActivity(signIntent);
+
                 break;
             default:
                 Log.d("View_id", "Taena");

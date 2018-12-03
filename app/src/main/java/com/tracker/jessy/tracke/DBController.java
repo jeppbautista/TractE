@@ -5,27 +5,28 @@ import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tracker.jessy.tracke.utils.PrintUtils;
 //import com.tracker.jessy.tracke.utils.PrintUtils;
 
-//import java.util.ArrayList;
-//import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Arrays;
 //import java.util.concurrent.CountDownLatch;
 
 public class DBController implements ValueEventListener {
 
-//    private DatabaseReference DB;
-//    private User user;
-//    private static ArrayList<User> users;
-//
-//    public DBController()
-//    {
-//        DB = FirebaseDatabase.getInstance().getReference();
-//        DB.addValueEventListener(this);
-//        DB.push();
-//    }
+    private DatabaseReference DB;
+    private User user;
+    private static ArrayList<User> users;
+
+    public DBController()
+    {
+        DB = FirebaseDatabase.getInstance().getReference();
+        DB.addValueEventListener(this);
+        DB.push();
+    }
 //
 //    private ArrayList getList()
 //    {
@@ -64,19 +65,21 @@ public class DBController implements ValueEventListener {
 //        DB.push();
 //    }
 //
-//    public ArrayList<String> retreiveUsername()
-//    {
-//        DB.push();
+    public ArrayList<String> retreiveUsername()
+    {
+        DatabaseReference temp = FirebaseDatabase.getInstance().getReference();
+        temp.addValueEventListener(this);
+        temp.push();
+
+        PrintUtils.print(this.users.toString());
+//        ArrayList<String> usernames = new ArrayList<>();
 //
-//        PrintUtils.print(this.users.toString());
-////        ArrayList<String> usernames = new ArrayList<>();
-////
-////        for (User us : users)
-////        {
-////            usernames.add(us.getUsername());
-////        }
-//
-//        return new ArrayList<String>(Arrays.asList(new String[]{"foo"}));
-//    }
+//        for (User us : users)
+//        {
+//            usernames.add(us.getUsername());
+//        }
+
+        return new ArrayList<String>(Arrays.asList(new String[]{"foo"}));
+    }
 }
 

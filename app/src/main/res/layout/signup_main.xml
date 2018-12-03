@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/radioGrp"
+        android:layout_width="95dp"
+        android:layout_height="68dp"
+        android:layout_alignStart="@+id/btnSignup"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-10dp"
+        android:layout_marginBottom="146dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radio_courier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/radioGrp"
+            android:text="Courier" />
+
+        <RadioButton
+            android:id="@+id/radio_cust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Customer" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="42dp"
+        android:text="Create an account"
+        android:textSize="25dp" />
+
+    <Button
+        android:id="@+id/btnSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:text="Sign up" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="140dp"
+        android:text="Email" />
+
+    <EditText
+        android:id="@+id/txtEmail_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView7"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="122dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="211dp"
+        android:text="Password" />
+
+    <EditText
+        android:id="@+id/txtPassword_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/textView7"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="200dp"
+        android:ems="10"
+        android:inputType="textPassword" />
+
+</RelativeLayout>
