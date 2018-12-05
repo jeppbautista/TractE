@@ -49,6 +49,7 @@ import java.util.HashMap;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
@@ -72,23 +73,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
-    protected void onCreate(@Nullable Bundle state)
-    {
+    protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.map_main);
 
 
-
-        loginToFirebase();
         getLocationPermission();
+        loginToFirebase();
         startTrackerService();
         //initMap();
         //startLocationUpdates();
+    }
 
+    private void getDeviceLocation(){
+        Log.d(TAG,"getDeviceLocation: getting the device location ");
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if(mLocationPermissionsGranted){
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG,"onComplete: found Location!");
+                            Location currentLocation = (Location) task.getResult();
+
+                            moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),
+                                    DEFAULT_ZOOM);
+                        }else{
+                            Log.d(TAG,"onComplete: current location is null");
+                            Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }catch (SecurityException e){
+            Log.e(TAG,"getDeviceLocation: Security Exception " + e.getMessage());
+        }
     }
 
     private void loginToFirebase()
     {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(MapActivity.this);
 
     }
 
@@ -117,8 +145,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-
-
     private void startTrackerService()
     {
         Log.d(TAG, "Running...");
@@ -134,7 +160,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void initMap()
     {
-//        Log.d(TAG,"initMap: Initializing Mao");
+//        Log.d(TAG,"initMap: Initializing Map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this);
     }
@@ -146,9 +172,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mMap = googleMap;
 
-
         if (mLocationPermissionsGranted) {
-            //getDeviceLocation();
+            getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -162,8 +187,4 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
     }
-
-
-
-
 }
