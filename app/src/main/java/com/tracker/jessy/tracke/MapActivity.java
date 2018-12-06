@@ -31,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -70,7 +71,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
-
+    final Marker[] marker = {null};
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
@@ -93,7 +94,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final String tracking = getIntent().getStringExtra("TRACKING");
         final String[] courierID = {""};
 
-        DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+
+        final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
         DB.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -103,6 +105,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     if (d.child("tracking").getValue().toString().equals(tracking))
                     {
                         courierID[0] = d.getKey().toString();
+                        DB.child("users").child(courierID[0]).child("location").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                try{
+                                    if(marker[0] == null)
+                                    {
+                                        MarkerOptions markerOptions = new MarkerOptions().position(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue())).title("Hello Maps");
+                                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_tracker));
+                                        setMarker(markerOptions);
+                                    }
+                                    else
+                                    {
+                                        ((Marker)marker[0]).setPosition(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()));
+                                        Log.d("xxx2", dataSnapshot.child("latitude").getValue().toString() + " " + dataSnapshot.child("longitude").getValue().toString());
+
+                                    }
+
+                                    moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),
+                                            DEFAULT_ZOOM);
+                                }catch (Exception e)
+                                {
+
+                                }
+
+                            } // TODO flag onDelivery
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 }
 
@@ -114,27 +148,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        DB.child("users").child(courierID[0]).child("location").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                try{
-                    //TODO paganahin tong putanginang to
-                    Log.d("xxx2", dataSnapshot.child("latitude").getValue().toString() + " " + dataSnapshot.child("longitude").getValue().toString());
-                    moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),
-                            DEFAULT_ZOOM);
-                }catch (Exception e)
-                {
-
-                }
-
-            } // TODO flag onDelivery
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
 //        try{
@@ -190,8 +204,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void moveCamera(LatLng latLng, float zoom)
     {
-//        Log.d(TAG,"moveCamera: moving the camera to: lat:" + latLng.latitude + ", lng:" + latLng.longitude);
+        Log.d(TAG,"moveCamera: moving the camera to: lat:" + latLng.latitude + ", lng:" + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+    }
+
+    private void setMarker(MarkerOptions m)
+    {
+        marker[0] = mMap.addMarker(m);
     }
 
     private void initMap()

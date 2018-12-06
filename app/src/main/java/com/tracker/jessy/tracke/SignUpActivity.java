@@ -67,7 +67,7 @@ public class SignUpActivity  extends Activity {
 
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
-                            User user = new User(currentUser.getEmail(), radioButton.getText().toString().equals("Courier") ? true : false , new Location());
+                            User user = new User(currentUser.getEmail(), radioButton.getText().toString().equals("Courier") ? true : false, "" , new Location());
                             ref.setValue(user);
 
                             Toast.makeText(SignUpActivity.this, "Authentication success.",

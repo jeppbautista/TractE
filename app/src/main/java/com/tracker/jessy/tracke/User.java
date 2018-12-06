@@ -6,12 +6,14 @@ public class User
     public String UID;
     public boolean isCourier;
     public Location location;
+    public String tracking;
 
 
-    public User (String user, boolean courier, Location loc)
+    public User (String user, boolean courier, String track, Location loc)
     {
         this.username = user;
         this.isCourier = courier;
+        this.tracking = track;
         this.location = loc;
     }
 

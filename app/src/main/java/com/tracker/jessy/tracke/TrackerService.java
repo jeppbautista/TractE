@@ -168,7 +168,7 @@ public class TrackerService extends Service {
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
 //        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         Log.d(TAG,msg);
         Location currentLocation = location;
 
