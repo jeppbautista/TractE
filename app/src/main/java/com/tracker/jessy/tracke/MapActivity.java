@@ -44,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -55,7 +56,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private GoogleMap mMap;
-
+    private FirebaseAuth mAuth;
 
     private static final String TAG = "xxx";
 
@@ -77,48 +78,90 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(state);
         setContentView(R.layout.map_main);
 
+        mAuth = FirebaseAuth.getInstance();
 
         getLocationPermission();
-        loginToFirebase();
-        startTrackerService();
-        //initMap();
+//        loginToFirebase();
+//        startTrackerService();
+        initMap();
         //startLocationUpdates();
     }
 
     private void getDeviceLocation(){
         Log.d(TAG,"getDeviceLocation: getting the device location ");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        final String tracking = getIntent().getStringExtra("TRACKING");
+        final String[] courierID = {""};
 
-        try{
-            if(mLocationPermissionsGranted){
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG,"onComplete: found Location!");
-                            Location currentLocation = (Location) task.getResult();
+        DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+        DB.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
-                        }else{
-                            Log.d(TAG,"onComplete: current location is null");
-                            Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                        }
+                for(DataSnapshot d : dataSnapshot.getChildren())
+                {
+                    if (d.child("tracking").getValue().toString().equals(tracking))
+                    {
+                        courierID[0] = d.getKey().toString();
                     }
-                });
+                }
+
             }
-        }catch (SecurityException e){
-            Log.e(TAG,"getDeviceLocation: Security Exception " + e.getMessage());
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DB.child("users").child(courierID[0]).child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                try{
+                    //TODO paganahin tong putanginang to
+                    Log.d("xxx2", dataSnapshot.child("latitude").getValue().toString() + " " + dataSnapshot.child("longitude").getValue().toString());
+                    moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),
+                            DEFAULT_ZOOM);
+                }catch (Exception e)
+                {
+
+                }
+
+            } // TODO flag onDelivery
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+//        try{
+//            if(mLocationPermissionsGranted){
+//                final Task location = mFusedLocationProviderClient.getLastLocation();
+//                location.addOnCompleteListener(new OnCompleteListener() {
+//                    @Override
+//                    public void onComplete(@NonNull Task task) {
+//                        if(task.isSuccessful()){
+//                            Log.d(TAG,"onComplete: found Location!");
+//                            Location currentLocation = (Location) task.getResult();
+//
+//                            moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),
+//                                    DEFAULT_ZOOM);
+//                        }else{
+//                            Log.d(TAG,"onComplete: current location is null");
+//                            Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//            }
+//        }catch (SecurityException e){
+//            Log.e(TAG,"getDeviceLocation: Security Exception " + e.getMessage());
+//        }
     }
 
-    private void loginToFirebase()
-    {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(MapActivity.this);
 
-    }
 
     private void getLocationPermission(){
         Log.d(TAG,"getLocationPermission: getting location permissions");
@@ -142,13 +185,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     permissions,
                     LOCAL_PERMISSION_REQUEST_CODE);
         }
-
-    }
-
-    private void startTrackerService()
-    {
-        Log.d(TAG, "Running...");
-        startService(new Intent(this, TrackerService.class));
 
     }
 

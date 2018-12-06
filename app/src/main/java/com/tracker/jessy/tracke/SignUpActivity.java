@@ -3,7 +3,6 @@ package com.tracker.jessy.tracke;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -26,6 +25,7 @@ public class SignUpActivity  extends Activity {
     private RadioButton radioButton;
 
     private FirebaseAuth mAuth;
+    private boolean isSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,6 +44,7 @@ public class SignUpActivity  extends Activity {
                 radioButton = (RadioButton) findViewById(selectedId);
                 //TODO forms handling
                 createFirebaseUser();
+
             }
         });
     }
@@ -52,12 +53,10 @@ public class SignUpActivity  extends Activity {
     {
 
         mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//
-//        Log.d(TAG, currentUser.getEmail());
+
 
         final String email = ((TextView)findViewById(R.id.txtEmail_2)).getText().toString();
-        final String pass = ((TextView)findViewById(R.id.txtPassword_2)).getText().toString();
+        final String pass = ((TextView)findViewById(R.id.txtPassword_login)).getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -65,7 +64,6 @@ public class SignUpActivity  extends Activity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful())
                         {
-                            //TODO save user to realtime DB
 
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
@@ -74,11 +72,14 @@ public class SignUpActivity  extends Activity {
 
                             Toast.makeText(SignUpActivity.this, "Authentication success.",
                                     Toast.LENGTH_SHORT).show();
+
                         }
                         else
                         {
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+
+
                         }
                     }
                 });

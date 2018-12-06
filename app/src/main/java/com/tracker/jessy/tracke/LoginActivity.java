@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,12 +12,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 public class LoginActivity extends Activity implements View.OnClickListener{
 
     private final int REQUEST_CAMERA = 1;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,7 +36,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         Button btnCam = findViewById(R.id.btnCamera);
         btnCam.setOnClickListener(this);
 
-        //For Map testing - START
         if(isServiceOk()){
 
             Button btnMap = findViewById(R.id.btnMap);
@@ -36,16 +43,14 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                    startActivity(intent);
+
                 }
             });
         }
-        //For Map testing - END
     }
 
     private void scanBarcode() {
-        new IntentIntegrator(this).initiateScan(); // `this` is the current Activity
+        new IntentIntegrator(this).initiateScan();
     }
 
     @Override
@@ -56,6 +61,40 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                final String tNum = result.getContents();
+                if(isServiceOk())
+                {
+
+                    mAuth = FirebaseAuth.getInstance();
+                    final boolean[] courier = new boolean[1];
+
+                    final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+                    DB.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            courier[0] = (boolean) dataSnapshot.child("isCourier").getValue();
+                            if(courier[0] == true)
+                            {
+                                DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tNum);
+                                startTrackerService();
+                                // TODO delivery UI
+                            }
+                            else
+                            {
+                                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                                intent.putExtra("TRACKING", tNum);
+                                startActivity(intent);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -64,12 +103,15 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        scanBarcode();
+        switch (v.getId())
+        {
+            case R.id.btnCamera:
+                scanBarcode();
+                break;
+
+        }
     }
 
-
-    // START======================================= GOOGLE API ONYL ==================================
-    // Google Play Services Request variables
     private static final String TAG ="MapActivity";
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
@@ -91,5 +133,12 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         }
         return false;
     }
-    // END======================================= GOOGLE API ONYL ==================================
+
+    private void startTrackerService()
+    {
+        Log.d(TAG, "Running...");
+        startService(new Intent(this, TrackerService.class));
+
+    }
+
 }

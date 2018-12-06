@@ -58,6 +58,12 @@ public class TrackerService extends Service {
     public static final String NOTIFICATION_CHANNEL_ID_SERVICE = "com.tracker.jessy.TrackerService";
     public static final String NOTIFICATION_CHANNEL_ID_INFO = "com.tracker.jessy.info";
 
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference DB;
+    private com.tracker.jessy.tracke.Location location;
+
+
     @Override
     public IBinder onBind(Intent intent) {return null;}
 
@@ -66,12 +72,15 @@ public class TrackerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (true)//(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startMyOwnForeground();
         else
             buildNotification();
 
-        loginToFirebase();
+        //loginToFirebase();
+        mAuth = FirebaseAuth.getInstance();
+        DB = FirebaseDatabase.getInstance().getReference();
+        this.location = new com.tracker.jessy.tracke.Location();
         startLocationUpdates();
     }
 
@@ -123,27 +132,6 @@ public class TrackerService extends Service {
         }
     };
 
-    private void loginToFirebase() {
-
-        // Warning: For simplicity's sake, in this codelab we're storing the credentials for Firebase in plain text.
-        // A real-world application should not do this, and should treat these credentials securely,
-        // such as having the user input the username and password via a form in the app.
-        Log.d("xxx", "Logging in to firebase...");
-
-        String email = getString(R.string.firebase_email);
-        String password = getString(R.string.firebase_password);
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>(){
-            @Override
-            public void onComplete(Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "firebase auth success");
-                } else {
-                    Log.d(TAG, task.getException().toString());
-                }
-            }
-        });
-    }
 
     private void startLocationUpdates()
     {
@@ -184,9 +172,10 @@ public class TrackerService extends Service {
         Log.d(TAG,msg);
         Location currentLocation = location;
 
+        this.location.setLongitude((float) location.getLongitude());
+        this.location.setLatitude((float) location.getLatitude());
 
-
-        //TODO implement firebase update here
+        DB.child("users").child(mAuth.getCurrentUser().getUid()).child("location").setValue(this.location);
 
 
     }

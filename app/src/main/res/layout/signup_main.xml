@@ -81,7 +81,7 @@
         android:text="Password" />
 
     <EditText
-        android:id="@+id/txtPassword_2"
+        android:id="@+id/txtPassword_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textView7"
