@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -74,10 +76,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     final Marker[] marker = {null};
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    LinearLayout linearLayout;
+    BottomSheetBehavior bottomSheetBehavior;
     @Override
     protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.map_main);
+
+        linearLayout = (LinearLayout) findViewById(R.id.map_bottom_sheet_id);
+        bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
 
         mAuth = FirebaseAuth.getInstance();
 
