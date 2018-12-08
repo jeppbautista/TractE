@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,18 +35,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
         Button btnCam = findViewById(R.id.btnCamera);
         btnCam.setOnClickListener(this);
-
-      /*  if(isServiceOk()){
-
-            Button btnMap = findViewById(R.id.btnMap);
-            btnMap.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }*/
     }
 
     @Override
@@ -96,9 +85,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
                         }
                     });
-
-
-
                 }
             }
         } else {
@@ -109,10 +95,14 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     private void logOut()
     {
         mAuth.getInstance().signOut();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
+
     }
 
     @Override
     public void onClick(View v) {
+
         switch (v.getId())
         {
             case R.id.btnCamera:
@@ -123,7 +113,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     }
 
 
-    private static final String TAG ="MapActivity";
+    private static final String TAG ="xxx";
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 

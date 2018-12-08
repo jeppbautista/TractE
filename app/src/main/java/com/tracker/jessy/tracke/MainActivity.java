@@ -31,15 +31,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-        setContentView(R.layout.activity_main);
 
-        Button signUp, logIn;
-        signUp =  findViewById(R.id.btnSignUp);
-        logIn = findViewById(R.id.btnLogin);
+        if (mAuth.getInstance().getCurrentUser() == null )
+        {
+            setContentView(R.layout.activity_main);
 
+            Button signUp, logIn;
+            signUp =  findViewById(R.id.btnSignUp);
+            logIn = findViewById(R.id.btnLogin);
 
-        signUp.setOnClickListener(this);
-        logIn.setOnClickListener(this);
+            signUp.setOnClickListener(this);
+            logIn.setOnClickListener(this);
+        }
+        else
+        {
+            Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(logIntent);
+        }
+
 
     }
 
@@ -51,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch(v.getId())
         {
-
             case R.id.btnLogin:
 
                 String email = "";
@@ -93,30 +101,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("View_id", "");
         }
     }
-
-    private boolean isCourier(String uid)
-    {
-        DatabaseReference DB;
-        DB = FirebaseDatabase.getInstance().getReference();
-        DB.child("users").child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren())
-                {
-                    Log.d("xxx", d.toString());
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        return true;
-    }
-
-
 }
