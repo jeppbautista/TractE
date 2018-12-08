@@ -31,6 +31,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -273,10 +274,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom)
+    private void moveCamera(LatLng coordination, float zoom)
     {
-        Log.d(TAG,"moveCamera: moving the camera to: lat:" + latLng.latitude + ", lng:" + latLng.longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+        Log.d(TAG,"moveCamera: moving the camera to: lat:" + coordination.latitude + ", lng:" + coordination.longitude);
+        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(coordination,zoom);
+        mMap.animateCamera(location);
     }
 
     private void setMarker(MarkerOptions m)
