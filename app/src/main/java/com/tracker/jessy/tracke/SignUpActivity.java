@@ -58,41 +58,51 @@ public class SignUpActivity  extends Activity {
 
         final String email = ((TextView)findViewById(R.id.txtEmail_2)).getText().toString();
         final String pass = ((TextView)findViewById(R.id.txtPassword_login)).getText().toString();
-        try
-        {
-            String userType = radioButton.getText().toString();
-        }
-        catch (Exception e)
-        {
-        }
 
 
-//
-//        mAuth.createUserWithEmailAndPassword(email, pass)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful())
-//                        {
-//
-//                            FirebaseUser currentUser = mAuth.getCurrentUser();
-//                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
-//                            User user = new User(currentUser.getEmail(), radioButton.getText().toString().equals("Courier") ? true : false, false,"" , new Location());
-//                            ref.setValue(user);
-//
-//                            Toast.makeText(SignUpActivity.this, "Authentication success.",
-//                                    Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                        else
-//                        {
-//                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-//                                    Toast.LENGTH_SHORT).show();
-//
-//
-//                        }
-//                    }
-//                });
+        if (email == "" || pass == "")
+        {
+            mAuth.createUserWithEmailAndPassword(email, pass)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful())
+                            {
+
+                                FirebaseUser currentUser = mAuth.getCurrentUser();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
+                                String userType = "";
+                                try
+                                {
+                                    userType = radioButton.getText().toString();
+                                    User user = new User(currentUser.getEmail(), userType.equals("Courier") ? true : false, false,"" , new Location());
+                                    ref.setValue(user);
+
+                                    Toast.makeText(SignUpActivity.this, "Authentication success.",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Toast.makeText(SignUpActivity.this, "Please select a user type.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                            else
+                            {
+                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+        else
+        {
+            Toast.makeText(SignUpActivity.this, "Please fill up the fields.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
