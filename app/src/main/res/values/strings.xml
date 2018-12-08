@@ -7,5 +7,6 @@
     <string name="firebase_email" translatable="false">jeppbautista@gmail.com</string>
     <string name="firebase_password" translatable="false">Walangforever12345!</string>
     <string name="title_activity_main_screen">MainScreenActivity</string>
+    <string name="title_activity_courier_dashboard">CourierDashboard</string>
 
 </resources>

@@ -36,8 +36,6 @@
             android:text="Scan and locate"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
-
-
     </LinearLayout>
 
     <Button

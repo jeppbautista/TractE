@@ -44,6 +44,10 @@
         <activity
             android:name=".MainScreenActivity"
             android:label="@string/title_activity_main_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CourierDashboard"
+            android:label="@string/title_activity_courier_dashboard"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

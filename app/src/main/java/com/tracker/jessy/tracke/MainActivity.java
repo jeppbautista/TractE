@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final String TAG = "xxx";
     private FirebaseAuth mAuth;
 
+    private CourierDashboard courierDashboard;
 
     @Override
     protected void onCreate(Bundle state) {
@@ -49,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(logIntent);
         }
 
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -77,12 +76,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     if (task.isSuccessful()) {
 
                                         Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                                        Intent logIntent = new Intent(MainActivity.this, CourierDashboard.class);
                                         startActivity(logIntent);
-
 
                                     } else {
                                         Toast.makeText(MainActivity.this, "Invalid credentials. Log in failed", Toast.LENGTH_LONG).show();
-
                                     }
 
                                 }
