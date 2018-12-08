@@ -43,7 +43,6 @@ public class SignUpActivity  extends Activity {
                 int selectedId = radioGroup.getCheckedRadioButtonId();
 
                 radioButton = (RadioButton) findViewById(selectedId);
-                //TODO forms handling
                 createFirebaseUser();
 
             }

@@ -1,7 +1,5 @@
 package com.tracker.jessy.tracke;
 
-//TODO login auth
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;

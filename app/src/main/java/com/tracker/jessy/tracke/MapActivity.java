@@ -63,7 +63,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private HashMap<String, Marker> mMarkers = new HashMap<>();
     private GoogleMap mMap;
-    private FirebaseAuth mAuth;
 
     private static final String TAG = "xxx";
 
@@ -71,17 +70,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCAL_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
-    private Context mContext;
 
     private Boolean mLocationPermissionsGranted = false;
-    private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
     final Marker[] marker = {null};
-    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     LinearLayout linearLayout;
     BottomSheetBehavior bottomSheetBehavior;
+
     @Override
     protected void onCreate(@Nullable Bundle state) {
         super.onCreate(state);
@@ -90,18 +85,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         linearLayout = (LinearLayout) findViewById(R.id.map_bottom_sheet_id);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
 
-        mAuth = FirebaseAuth.getInstance();
-
         getLocationPermission();
-//        loginToFirebase();
-//        startTrackerService();
         initMap();
-        //startLocationUpdates();
     }
 
     private void getDeviceLocation(){
         Log.d(TAG,"getDeviceLocation: getting the device location ");
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         final String tracking = getIntent().getStringExtra("TRACKING");
         final String[] courierID = {""};
 
@@ -132,7 +122,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     else
                                     {
                                         ((Marker)marker[0]).setPosition(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()));
-                                        Log.d("xxx2", dataSnapshot.child("latitude").getValue().toString() + " " + dataSnapshot.child("longitude").getValue().toString());
                                     }
 
                                     moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),
@@ -142,12 +131,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                                 }
 
-                            } // TODO flag onDelivery
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
                             }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError)
+                            {}
                         });
                     }
                 }
@@ -155,36 +142,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-
-
-
-
-//        try{
-//            if(mLocationPermissionsGranted){
-//                final Task location = mFusedLocationProviderClient.getLastLocation();
-//                location.addOnCompleteListener(new OnCompleteListener() {
-//                    @Override
-//                    public void onComplete(@NonNull Task task) {
-//                        if(task.isSuccessful()){
-//                            Log.d(TAG,"onComplete: found Location!");
-//                            Location currentLocation = (Location) task.getResult();
-//
-//                            moveCamera(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),
-//                                    DEFAULT_ZOOM);
-//                        }else{
-//                            Log.d(TAG,"onComplete: current location is null");
-//                            Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//            }
-//        }catch (SecurityException e){
-//            Log.e(TAG,"getDeviceLocation: Security Exception " + e.getMessage());
-//        }
     }
 
     private void initialiseOnlinePresence(final String userId){
@@ -286,7 +245,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void initMap()
     {
-//        Log.d(TAG,"initMap: Initializing Map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this);
     }
