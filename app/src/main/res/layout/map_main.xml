@@ -10,13 +10,15 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         tools:context=".MapActivity" />
 
     <include
         layout="@layout/map_buttom_sheet"
         android:visibility="visible"
-        app:layout_behavior="@string/bottom_sheet_behavior"></include>
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"></include>
 
 
 </android.support.design.widget.CoordinatorLayout>
