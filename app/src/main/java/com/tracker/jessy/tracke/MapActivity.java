@@ -122,14 +122,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 try{
                                     if(marker[0] == null)
                                     {
-
                                         LatLng courierLocation = new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue());
                                         MarkerOptions markerOptions = new MarkerOptions().position(courierLocation).title("Hello Maps");
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_truck));
                                         setMarker(markerOptions);
 
                                         initialiseOnlinePresence(courierID[0]);
-
                                     }
                                     else
                                     {

@@ -29,14 +29,13 @@ public class LoginActivity extends Activity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_main);
 
         Button btnCam = findViewById(R.id.btnCamera);
         btnCam.setOnClickListener(this);
 
-        if(isServiceOk()){
+      /*  if(isServiceOk()){
 
             Button btnMap = findViewById(R.id.btnMap);
             btnMap.setOnClickListener(new View.OnClickListener(){
@@ -46,7 +45,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
                 }
             });
-        }
+        }*/
     }
 
     private void scanBarcode() {
