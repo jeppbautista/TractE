@@ -14,7 +14,7 @@
         android:layout_marginTop="9dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="jeppbautista@gmail.com"
+        android:text="acestrada0202@gmail.com"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 

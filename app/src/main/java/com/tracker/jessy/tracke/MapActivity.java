@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -101,7 +102,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final String tracking = getIntent().getStringExtra("TRACKING");
         final String[] courierID = {""};
 
-
         final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
         DB.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -122,12 +122,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         MarkerOptions markerOptions = new MarkerOptions().position(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue())).title("Hello Maps");
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_tracker));
                                         setMarker(markerOptions);
+
+                                        // Setting Text status
+                                        TextView product_name = (TextView)findViewById(R.id.product_name_text);
+                                        TextView deliveryStatus = (TextView)findViewById(R.id.delivery_status_text);
+                                        product_name.setText("Hello");
+                                        deliveryStatus.setText("Nagdedeliver na");
                                     }
                                     else
                                     {
                                         ((Marker)marker[0]).setPosition(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()));
                                         Log.d("xxx2", dataSnapshot.child("latitude").getValue().toString() + " " + dataSnapshot.child("longitude").getValue().toString());
-
                                     }
 
                                     moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),

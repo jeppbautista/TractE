@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/map_bottom_sheet_id"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_weight="0.2"
     android:background="@android:color/white"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <LinearLayout
@@ -14,7 +16,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="20dp"
+        android:paddingVertical="10dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
@@ -23,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+
             android:orientation="horizontal">
 
             <ImageView
@@ -44,16 +47,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="51dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_weight="100"
+            android:orientation="vertical"
+            android:paddingLeft="51dp">
 
             <TextView
-            android:layout_width="350dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Product Name"
-            android:textAppearance="@android:style/TextAppearance.Material.Small" />
+                android:id="@+id/product_name_text"
+                android:layout_width="350dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Product Name"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
+
             <TextView
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
@@ -85,33 +90,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Product Details"
+                android:text="Delivery Status"
                 android:textAppearance="@android:style/TextAppearance.Material.Title" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="51dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="51dp">
 
             <TextView
+                android:id="@+id/delivery_status_text"
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Product Name"
-                android:textAppearance="@android:style/TextAppearance.Material.Small" />
-            <TextView
-                android:layout_width="350dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="PRODUCT DETAILS"
+                android:text="Status"
                 android:textAppearance="@android:style/TextAppearance.Material.Small" />
         </LinearLayout>
     </LinearLayout>
-
-
 
 
 </LinearLayout>

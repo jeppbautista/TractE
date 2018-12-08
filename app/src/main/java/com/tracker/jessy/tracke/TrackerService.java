@@ -177,7 +177,6 @@ public class TrackerService extends Service {
 
         DB.child("users").child(mAuth.getCurrentUser().getUid()).child("location").setValue(this.location);
 
-
     }
 
 }
