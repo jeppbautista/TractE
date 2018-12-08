@@ -1,5 +1,7 @@
 package com.tracker.jessy.tracke;
 
+//TODO delivery constraint: prevent scanning until delivery is finished
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -180,31 +182,3 @@ public class TrackerService extends Service {
     }
 
 }
-
-//
-//
-//    private void requestLocationUpdates() {
-//        LocationRequest request = new LocationRequest();
-//        request.setInterval(10000);
-//        request.setFastestInterval(5000);
-//        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
-//        final String path = getString(R.string.firebase_path) + "/" + getString(R.string.transport_id);
-//        int permission = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION);
-//        if (permission == PackageManager.PERMISSION_GRANTED) {
-//            // Request location updates and when an update is
-//            // received, store the location in Firebase
-//            client.requestLocationUpdates(request, new LocationCallback() {
-//                @Override
-//                public void onLocationResult(LocationResult locationResult) {
-//                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference(path);
-//                    Location location = locationResult.getLastLocation();
-//                    if (location != null) {
-//                        Log.d(TAG, "location update " + location);
-//                        ref.setValue(location);
-//                    }
-//                }
-//            }, null);
-//        }
-//    }

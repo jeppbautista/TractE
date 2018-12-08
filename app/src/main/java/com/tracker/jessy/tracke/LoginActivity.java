@@ -1,5 +1,7 @@
 package com.tracker.jessy.tracke;
 
+//TODO login auth
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -46,6 +48,12 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                 }
             });
         }*/
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+
     }
 
     private void scanBarcode() {
@@ -100,6 +108,11 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    private void logOut()
+    {
+        mAuth.getInstance().signOut();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -110,6 +123,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
 
         }
     }
+
 
     private static final String TAG ="MapActivity";
 

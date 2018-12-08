@@ -3,6 +3,7 @@ package com.tracker.jessy.tracke;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -57,32 +58,41 @@ public class SignUpActivity  extends Activity {
 
         final String email = ((TextView)findViewById(R.id.txtEmail_2)).getText().toString();
         final String pass = ((TextView)findViewById(R.id.txtPassword_login)).getText().toString();
-
-        mAuth.createUserWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful())
-                        {
-
-                            FirebaseUser currentUser = mAuth.getCurrentUser();
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
-                            User user = new User(currentUser.getEmail(), radioButton.getText().toString().equals("Courier") ? true : false, "" , new Location());
-                            ref.setValue(user);
-
-                            Toast.makeText(SignUpActivity.this, "Authentication success.",
-                                    Toast.LENGTH_SHORT).show();
-
-                        }
-                        else
-                        {
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+        try
+        {
+            String userType = radioButton.getText().toString();
+        }
+        catch (Exception e)
+        {
+        }
 
 
-                        }
-                    }
-                });
+//
+//        mAuth.createUserWithEmailAndPassword(email, pass)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful())
+//                        {
+//
+//                            FirebaseUser currentUser = mAuth.getCurrentUser();
+//                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users/"+currentUser.getUid().toString());
+//                            User user = new User(currentUser.getEmail(), radioButton.getText().toString().equals("Courier") ? true : false, false,"" , new Location());
+//                            ref.setValue(user);
+//
+//                            Toast.makeText(SignUpActivity.this, "Authentication success.",
+//                                    Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                        else
+//                        {
+//                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//
+//
+//                        }
+//                    }
+//                });
     }
 
 
