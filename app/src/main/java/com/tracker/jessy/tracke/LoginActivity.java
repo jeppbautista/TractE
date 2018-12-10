@@ -71,6 +71,7 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                             {
                                 DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tNum);
                                 startTrackerService();
+                                finish();
                             }
                             else
                             {

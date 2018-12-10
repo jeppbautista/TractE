@@ -84,6 +84,15 @@ public class TrackerService extends Service {
         DB = FirebaseDatabase.getInstance().getReference();
         this.location = new com.tracker.jessy.tracke.Location();
         startLocationUpdates();
+        showCourierDashboard();
+    }
+
+    private void showCourierDashboard()
+    {
+        Intent i = new Intent();
+        i.setClass(this, CourierDashboard.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
 

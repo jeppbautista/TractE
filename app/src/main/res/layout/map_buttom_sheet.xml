@@ -57,14 +57,14 @@
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Product Name"
+                android:text="Product Name: Decathlon Quechua"
                 android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
             <TextView
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="PRODUCT DETAILS"
+                android:text="ARPENAZ HIKING BACKPACK 20 LITERS"
                 android:textAppearance="@android:style/TextAppearance.Material.Small" />
         </LinearLayout>
 
