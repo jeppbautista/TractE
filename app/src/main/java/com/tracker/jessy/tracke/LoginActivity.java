@@ -71,7 +71,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
                             {
                                 DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tNum);
                                 startTrackerService();
-                                // TODO delivery UI
                             }
                             else
                             {
@@ -97,7 +96,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         mAuth.getInstance().signOut();
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
-
     }
 
     @Override

@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -70,15 +71,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG,"getDeviceLocation: getting the device location ");
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         final String tracking = getIntent().getStringExtra("TRACKING");
+
         final String[] courierID = {""};
 
+        //TODO fix fucking code madafaka
         final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
-        DB.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tracking);
+
+
+        DB.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot d : dataSnapshot.getChildren())
                 {
+
+                    Log.d("xxx", d.getValue().toString());
                     if (d.child("tracking").getValue().toString().equals(tracking))
                     {
                         courierID[0] = d.getKey().toString();

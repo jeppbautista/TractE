@@ -1,6 +1,7 @@
 package com.tracker.jessy.tracke;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -26,7 +27,6 @@ public class SignUpActivity  extends Activity {
     private RadioButton radioButton;
 
     private FirebaseAuth mAuth;
-    private boolean isSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,15 +51,12 @@ public class SignUpActivity  extends Activity {
 
     private void createFirebaseUser()
     {
-
         mAuth = FirebaseAuth.getInstance();
-
 
         final String email = ((TextView)findViewById(R.id.txtEmail_2)).getText().toString();
         final String pass = ((TextView)findViewById(R.id.txtPassword_login)).getText().toString();
 
-
-        if (email == "" || pass == "")
+        if (email != "" && pass != "")
         {
             mAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -80,6 +77,8 @@ public class SignUpActivity  extends Activity {
                                     Toast.makeText(SignUpActivity.this, "Authentication success.",
                                             Toast.LENGTH_SHORT).show();
 
+                                    startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                    logOut();
                                 }
                                 catch (Exception e)
                                 {
@@ -104,5 +103,11 @@ public class SignUpActivity  extends Activity {
 
     }
 
+    private void logOut()
+    {
+        mAuth.getInstance().signOut();
+        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+        finish();
 
+    }
 }
