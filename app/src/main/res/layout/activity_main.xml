@@ -14,7 +14,6 @@
         android:layout_marginTop="9dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="jeppbautista@gmail.com"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -25,7 +24,6 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="123456"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 

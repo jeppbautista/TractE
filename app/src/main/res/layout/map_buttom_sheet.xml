@@ -104,13 +104,6 @@
             android:paddingLeft="51dp">
 
             <TextView
-                android:id="@+id/courier_username"
-                android:layout_width="350dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="courier username"
-                android:textAppearance="@android:style/TextAppearance.Material.Small" />
-            <TextView
                 android:id="@+id/courier_presence"
                 android:layout_width="350dp"
                 android:layout_height="match_parent"

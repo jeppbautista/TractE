@@ -54,6 +54,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     LinearLayout linearLayout;
     BottomSheetBehavior bottomSheetBehavior;
+    private TextView courierPresence;
 
     @Override
     protected void onCreate(@Nullable Bundle state) {
@@ -62,7 +63,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         linearLayout = (LinearLayout) findViewById(R.id.map_bottom_sheet_id);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
-
+        courierPresence = (TextView) findViewById(R.id.courier_presence);
         getLocationPermission();
         initMap();
     }
@@ -97,7 +98,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 try {
                                     if (marker[0] == null) {
                                         LatLng courierLocation = new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue());
-                                        MarkerOptions markerOptions = new MarkerOptions().position(courierLocation).title("Hello Maps");
+                                        MarkerOptions markerOptions = new MarkerOptions().position(courierLocation).title("Delivery");
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_truck));
                                         setMarker(markerOptions);
 
@@ -106,10 +107,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         ((Marker) marker[0]).setPosition(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()));
                                     }
 
+                                    Log.d("xxx", "On going Map Act");
+
                                     moveCamera(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()),
                                             DEFAULT_ZOOM);
                                 } catch (Exception e) {
-
+                                    courierPresence.setText("Offline");
                                 }
 
                             }
@@ -138,26 +141,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // (b) For delivery details
         final ImageView courierPresenceIcon = (ImageView) findViewById(R.id.mb_icon_delivery);
-        final TextView courierPresence = (TextView) findViewById(R.id.courier_presence);
-        final TextView courierUsername = (TextView) findViewById(R.id.courier_username);
+
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d : dataSnapshot.getChildren()) {
-                    if (d.getKey().equals(userId)) {
-                        courierUsername.setText(d.child("username").getValue().toString());
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "DatabaseError:" + databaseError);
-            }
-        });
 
         // Initialize Online Presence
         final DatabaseReference onlineRef = databaseReference.child(".info/connected");
@@ -165,7 +151,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         onlineRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
-                Log.d(TAG, "DataSnapshot:" + dataSnapshot);
                 if (dataSnapshot.getValue(Boolean.class)) {
                     currentUserRef.onDisconnect().removeValue();
                     currentUserRef.setValue(true);
@@ -215,7 +200,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void moveCamera(LatLng coordination, float zoom) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat:" + coordination.latitude + ", lng:" + coordination.longitude);
         CameraUpdate location = CameraUpdateFactory.newLatLngZoom(coordination, zoom);
         mMap.animateCamera(location);
     }
