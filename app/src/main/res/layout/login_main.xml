@@ -23,6 +23,7 @@
             android:text="TRACK ME"
             android:textAlignment="center" />
 
+
         <TextView
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="match_parent"

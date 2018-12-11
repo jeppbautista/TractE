@@ -25,4 +25,10 @@ public class CourierDashboard extends Activity {
         });*/
     }
 
+    @Override
+    public void onBackPressed()
+    {
+
+    }
+
 }

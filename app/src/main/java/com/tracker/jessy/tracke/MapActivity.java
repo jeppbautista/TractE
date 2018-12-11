@@ -67,8 +67,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         initMap();
     }
 
-    private void getDeviceLocation(){
-        Log.d(TAG,"getDeviceLocation: getting the device location ");
+    private void getDeviceLocation() {
+        Log.d(TAG, "getDeviceLocation: getting the device location ");
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         final String tracking = getIntent().getStringExtra("TRACKING");
 
@@ -85,43 +85,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot d : dataSnapshot.getChildren())
-                {
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
 
                     Log.d("xxx", d.getValue().toString());
-                    if (d.child("tracking").getValue().toString().equals(tracking))
-                    {
+                    if (d.child("tracking").getValue().toString().equals(tracking)) {
                         courierID[0] = d.getKey().toString();
                         DB.child("users").child(courierID[0]).child("location").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                try{
-                                    if(marker[0] == null)
-                                    {
-                                        LatLng courierLocation = new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue());
+                                try {
+                                    if (marker[0] == null) {
+                                        LatLng courierLocation = new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue());
                                         MarkerOptions markerOptions = new MarkerOptions().position(courierLocation).title("Hello Maps");
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_truck));
                                         setMarker(markerOptions);
 
                                         initialiseOnlinePresence(courierID[0]);
-                                    }
-                                    else
-                                    {
-                                        ((Marker)marker[0]).setPosition(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()));
+                                    } else {
+                                        ((Marker) marker[0]).setPosition(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()));
                                     }
 
-                                    moveCamera(new LatLng((double)dataSnapshot.child("latitude").getValue(),(double)dataSnapshot.child("longitude").getValue()),
+                                    moveCamera(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()),
                                             DEFAULT_ZOOM);
-                                }catch (Exception e)
-                                {
+                                } catch (Exception e) {
 
                                 }
 
                             }
+
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError)
-                            {}
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
                         });
                     }
                 }
@@ -129,33 +124,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
-    private void initialiseOnlinePresence(final String userId){
+    private void initialiseOnlinePresence(final String userId) {
         // Initialize TextView Variables
         // (a) For product details
-        final ImageView prodDescIconId = (ImageView)findViewById(R.id.prod_desc_icon_id);
-        final TextView product_name = (TextView)findViewById(R.id.product_name_text);
+        final ImageView prodDescIconId = (ImageView) findViewById(R.id.prod_desc_icon_id);
+        final TextView product_name = (TextView) findViewById(R.id.product_name_text);
         prodDescIconId.setColorFilter(Color.parseColor("#f4ce48"));
 
         // (b) For delivery details
-        final ImageView courierPresenceIcon = (ImageView)findViewById(R.id.mb_icon_delivery);
-        final TextView courierPresence = (TextView)findViewById(R.id.courier_presence);
-        final TextView courierUsername = (TextView)findViewById(R.id.courier_username);
+        final ImageView courierPresenceIcon = (ImageView) findViewById(R.id.mb_icon_delivery);
+        final TextView courierPresence = (TextView) findViewById(R.id.courier_presence);
+        final TextView courierUsername = (TextView) findViewById(R.id.courier_username);
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d: dataSnapshot.getChildren()){
-                    if(d.getKey().equals(userId)){
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
+                    if (d.getKey().equals(userId)) {
                         courierUsername.setText(d.child("username").getValue().toString());
                     }
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, "DatabaseError:" + databaseError);
@@ -169,13 +166,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.d(TAG, "DataSnapshot:" + dataSnapshot);
-                if (dataSnapshot.getValue(Boolean.class)){
+                if (dataSnapshot.getValue(Boolean.class)) {
                     currentUserRef.onDisconnect().removeValue();
-                        currentUserRef.setValue(true);
+                    currentUserRef.setValue(true);
 
                     // Setting Text status
                     courierPresence.setText("Active");
-                }else{
+                } else {
 
                     // Setting Text status
                     courierPresence.setText("Offline");
@@ -191,24 +188,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
     }
-    private void getLocationPermission(){
-        Log.d(TAG,"getLocationPermission: getting location permissions");
-        String [] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+
+    private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext()
-                    ,COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED ){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext()
+                    , COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
 
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCAL_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCAL_PERMISSION_REQUEST_CODE);
@@ -216,27 +214,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void moveCamera(LatLng coordination, float zoom)
-    {
-        Log.d(TAG,"moveCamera: moving the camera to: lat:" + coordination.latitude + ", lng:" + coordination.longitude);
-        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(coordination,zoom);
+    private void moveCamera(LatLng coordination, float zoom) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat:" + coordination.latitude + ", lng:" + coordination.longitude);
+        CameraUpdate location = CameraUpdateFactory.newLatLngZoom(coordination, zoom);
         mMap.animateCamera(location);
     }
 
-    private void setMarker(MarkerOptions m)
-    {
+    private void setMarker(MarkerOptions m) {
         marker[0] = mMap.addMarker(m);
     }
 
-    private void initMap()
-    {
+    private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this);
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
+    public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
 
         mMap = googleMap;
@@ -254,6 +248,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         }
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
 
     }
 }
