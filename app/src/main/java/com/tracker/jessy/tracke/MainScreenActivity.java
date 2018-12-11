@@ -9,7 +9,6 @@ import android.view.View;
 
 public class MainScreenActivity extends AppCompatActivity {
 
-    // TODO convert Blank activity to Basic activity class except for MainActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

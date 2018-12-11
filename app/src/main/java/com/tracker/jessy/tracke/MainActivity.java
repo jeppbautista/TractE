@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle state)
     {
         super.onCreate(state);
-//        mAuth.getInstance().getCurrentUser()git
 
         connected = false;
         //Check internet connectivity
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        if (null == null )
+        if (mAuth.getInstance().getCurrentUser() == null )
         {
             setContentView(R.layout.activity_main);
 
@@ -60,9 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             signUp.setOnClickListener(this);
             logIn.setOnClickListener(this);
-
-
-
 
         }
         else
@@ -78,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         SimpleDateFormat sfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sfd.format(new Date(value));
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+        System.exit(0);
     }
 
 
@@ -102,9 +105,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
-//                                        Intent logIntent = new Intent(MainActivity.this, CourierDashboard.class);
-                                        startActivity(logIntent);
+                                        DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+                                        boolean ongoing = false;
+                                        DB.child("/users").child(mAuth.getCurrentUser().getUid()).child("isDelivered").addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if ((boolean)dataSnapshot.getValue() == false) {
+                                                    Intent intent = new Intent(MainActivity.this, TrackerService.class);
+                                                    startService(intent);
+                                                    finish();
+                                                }
+                                                else
+                                                {
+                                                    Intent logIntent = new Intent(MainActivity.this, LoginActivity.class);
+                                                    startActivity(logIntent);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
 
                                     } else {
                                         if(!connected)

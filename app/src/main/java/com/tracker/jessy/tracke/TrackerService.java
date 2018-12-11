@@ -65,7 +65,6 @@ public class TrackerService extends Service {
     private DatabaseReference DB;
     private com.tracker.jessy.tracke.Location location;
 
-
     @Override
     public IBinder onBind(Intent intent) {return null;}
 

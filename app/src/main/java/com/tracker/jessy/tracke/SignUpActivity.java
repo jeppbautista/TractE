@@ -71,7 +71,7 @@ public class SignUpActivity  extends Activity {
                                 try
                                 {
                                     userType = radioButton.getText().toString();
-                                    User user = new User(currentUser.getEmail(), userType.equals("Courier") ? true : false, false,"" , new Location());
+                                    User user = new User(currentUser.getEmail(), userType.equals("Courier") ? true : false, true,"" , new Location());
                                     ref.setValue(user);
 
                                     Toast.makeText(SignUpActivity.this, "Authentication success.",

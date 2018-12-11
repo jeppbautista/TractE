@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,10 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.w3c.dom.Text;
+
 public class LoginActivity extends Activity implements View.OnClickListener{
 
     private final int REQUEST_CAMERA = 1;
     private FirebaseAuth mAuth;
+    private String UID;
+    private TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,7 +40,22 @@ public class LoginActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.login_main);
 
         Button btnCam = findViewById(R.id.btnCamera);
+        Button btnStart = findViewById(R.id.btnStart);
+        FloatingActionButton btnOut = findViewById(R.id.btnLogout);
+        txt = findViewById(R.id.txt_OrderNum);
+
         btnCam.setOnClickListener(this);
+        btnStart.setOnClickListener(this);
+        btnOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOut();
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        UID = mAuth.getCurrentUser().getUid();
+
     }
 
     @Override
@@ -54,42 +75,51 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scan Completed. Please wait for map to load.", Toast.LENGTH_LONG).show();
                 final String tNum = result.getContents();
-                if(isServiceOk())
-                {
 
-                    mAuth = FirebaseAuth.getInstance();
-                    final boolean[] courier = new boolean[1];
+                chooseActivity(tNum);
 
-                    final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
-                    DB.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            courier[0] = (boolean) dataSnapshot.child("isCourier").getValue();
-                            if(courier[0] == true)
-                            {
-                                DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tNum);
-                                startTrackerService();
-                                finish();
-                            }
-                            else
-                            {
-                                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                                intent.putExtra("TRACKING", tNum);
-                                startActivity(intent);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void chooseActivity(final String tNum)
+    {
+        if(isServiceOk())
+        {
+
+            final boolean[] courier = new boolean[1];
+
+            final DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+            DB.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    courier[0] = (boolean) dataSnapshot.child("isCourier").getValue();
+                    if(courier[0] == true)
+                    {
+                        DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue(tNum);
+                        DB.child("users").child(mAuth.getCurrentUser().getUid()).child("isDelivered").setValue(false);
+                        Intent intent = new Intent(LoginActivity.this, TrackerService.class);
+                        startService(intent);
+                        finish();
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                        intent.putExtra("TRACKING", tNum);
+                        startActivity(intent);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
 
     private void logOut()
@@ -107,7 +137,13 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             case R.id.btnCamera:
                 scanBarcode();
                 break;
-
+            case R.id.btnStart:
+                try {
+                    chooseActivity(txt.getText().toString());
+                }catch (NullPointerException e)
+                {
+                    Toast.makeText(this,"Please enter Order number", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
@@ -132,13 +168,6 @@ public class LoginActivity extends Activity implements View.OnClickListener{
             Toast.makeText(this,"", Toast.LENGTH_SHORT).show();
         }
         return false;
-    }
-
-    private void startTrackerService()
-    {
-        Log.d(TAG, "Running...");
-        startService(new Intent(this, TrackerService.class));
-
     }
 
 }
