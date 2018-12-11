@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle state)
     {
         super.onCreate(state);
-//        mAuth.getInstance().getCurrentUser()
+//        mAuth.getInstance().getCurrentUser()git
 
         connected = false;
         //Check internet connectivity
