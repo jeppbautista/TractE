@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+
+
         if (mAuth.getInstance().getCurrentUser() == null )
         {
             setContentView(R.layout.activity_main);
@@ -97,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogin:
                 String email = "";
                 String pass = "";
+
+
                 try {
                     email = ((TextView)findViewById(R.id.txtUser_login)).getText().toString();
                     pass = ((TextView)findViewById(R.id.txtPassword_login)).getText().toString();

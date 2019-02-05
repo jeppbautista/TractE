@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -57,9 +58,13 @@ public class CourierDashboard extends Activity {
                     .setMessage("Are you sure you want to finish your transaction?")
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+                            new SendMailTask(CourierDashboard.this).execute("jeppbautista@gmail.com",
+                                    "Walangforever12345!", "receiver@email.com", "emailSubject", "emailBody");
+
                             DB.child("users").child(mAuth.getCurrentUser().getUid()).child("isDelivered").setValue(true);
                             DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue("");
                             DB.child("users").child(mAuth.getCurrentUser().getUid()).child("location").setValue(new com.tracker.jessy.tracke.Location());
+
                             stopService(new Intent(CourierDashboard.this, TrackerService.class));
                             goToMain();
                         }
