@@ -85,9 +85,9 @@ public class CourierDashboard extends Activity {
                                                 if(ds2.child("tracking").getValue().toString().equals(tnum))
                                                 {
                                                     Log.d("jepp",ds2.child("username").getValue().toString());
-                                                    new SendMailTask(CourierDashboard.this).execute("jeppbautista@gmail.com",
+                                                    new SendMailTask(CourierDashboard.this).execute("tracke.noreply@gmail.com",
                                                             "Walangforever123456!", ds2.child("username").getValue().toString(), "Delivery completed", "Hi, " +
-                                                                    "Thanks for trusting Tracker E! We would like to inform you that your order with tracking number : " + ds2.child("tracking").toString() + " has been delivered. Thank you!");
+                                                                    "Thanks for trusting Tracker E! We would like to inform you that your order with tracking number : " + ds2.child("tracking").getValue().toString() + " has been delivered. Thank you!");
                                                     DB.child("users").child(ds2.getKey().toString()).child("tracking").setValue("");
                                                     DB.child("users").child(mAuth.getCurrentUser().getUid()).child("isDelivered").setValue(true);
                                                     DB.child("users").child(mAuth.getCurrentUser().getUid()).child("tracking").setValue("");
