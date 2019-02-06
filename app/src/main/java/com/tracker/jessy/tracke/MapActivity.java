@@ -61,9 +61,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(state);
         setContentView(R.layout.map_main);
 
-        linearLayout = (LinearLayout) findViewById(R.id.map_bottom_sheet_id);
-        bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
-        courierPresence = (TextView) findViewById(R.id.courier_presence);
+//        linearLayout = (LinearLayout) findViewById(R.id.map_bottom_sheet_id);
+//        bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
+//        courierPresence = (TextView) findViewById(R.id.courier_presence);
         getLocationPermission();
         initMap();
     }
@@ -102,7 +102,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_truck));
                                         setMarker(markerOptions);
 
-                                        initialiseOnlinePresence(courierID[0]);
+                                        //initialiseOnlinePresence(courierID[0]);
                                     } else {
                                         ((Marker) marker[0]).setPosition(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()));
                                     }
@@ -112,7 +112,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     moveCamera(new LatLng((double) dataSnapshot.child("latitude").getValue(), (double) dataSnapshot.child("longitude").getValue()),
                                             DEFAULT_ZOOM);
                                 } catch (Exception e) {
-                                    courierPresence.setText("Offline");
+                                    //courierPresence.setText("Offline");
                                 }
 
                             }
