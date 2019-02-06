@@ -52,9 +52,9 @@ class SendMailTask extends AsyncTask {
 
     }
 
-    @Override
-    public void onPostExecute(Object result) {
-        statusDialog.dismiss();
-    }
+//    @Override
+//    public void onPostExecute(Object result) {
+//        statusDialog.dismiss();
+//    }
 
 }
